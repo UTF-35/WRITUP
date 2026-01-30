@@ -14,5 +14,5 @@ Je tiens à préciser que **la plupart des README des projets sont réécrits et
 
 ## 🌿 Navigation
 
-**👉 Je vous invite à explorer les différentes branches pour découvrir les projets !**
-** et oui bien évidemment que il n'y a pas tout de poster **
+**👉 Je vous invite à explorer les différentes branches pour découvrir les projets !(tout n'est pas poster mais ca arrive soon les writeups me prenne beaucoup de temps)**
+
