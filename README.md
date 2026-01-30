@@ -130,13 +130,3 @@ sudo nmap -sX -p- 192.168.1.55
 
 **Résultat Mail :**  
 Je reçois instantanément une notification sur mon téléphone m'avertissant que l'IP `192.168.1.14` tente des manipulations exotiques sur le réseau.
-
----
-
-## 📝 License
-
-MIT
-
-## 🤝 Contributions
-
-Les PRs sont les bienvenues ! N'hésitez pas à ouvrir une issue pour discuter de nouvelles détections.
