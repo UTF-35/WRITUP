@@ -78,7 +78,7 @@ if packet[TCP].flags == "S":  # C'est un SYN
 
 ### 1. Cloner le repo & Dépendances
 ```bash
-git clone https://github.com/tonuser/RedAlert-Pi.git
+git clone https://github.com/UTF-35/RedAlert-Pi.git
 cd RedAlert-Pi
 sudo apt update && sudo apt install python3-pip
 pip3 install scapy
