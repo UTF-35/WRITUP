@@ -8,7 +8,8 @@
 **Fichiers fournis :**
 ```
 paranoid.zip/
-└── audit.log
+└── Challenge Files/
+  └── audit.log
 ```
 
 > 💡 Challenge relativement complexe basé sur l’analyse de logs Linux (`auditd`).
