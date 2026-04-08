@@ -1,5 +1,11 @@
 # 🔍 BTLO — META | OSINT/Forensics Challenge Writeup
 
+<p align="center">
+  <img src="https://img.shields.io/badge/Challenge-META-red?style=for-the-badge">
+  <img src="https://img.shields.io/badge/Type-Digital%20Forensics -blue?style=for-the-badge">
+  <img src="https://img.shields.io/badge/Difficulty-Easy-green?style=for-the-badge">
+</p>
+
 ## 📋 Scenario
 
 > The attached images were posted by a criminal on the run, with the caption *"I'm roaming free. You will never catch me"*. We believe you can assist us in proving him wrong.
