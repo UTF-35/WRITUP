@@ -179,6 +179,8 @@ https://www.sentinelone.com/vulnerability-database/cve-2021-3156/
 puis je suis allé voir les détails sur ce site-là  
 https://nvd.nist.gov/vuln/detail/cve-2021-3156  
 
+<img width="980" height="412" alt="Image" src="https://github.com/user-attachments/assets/3315d9a0-5025-46c6-9bec-74bfb7f1d450" />
+
 ---
 
 ### 🧠 Question 7) What type of vulnerability is this?
