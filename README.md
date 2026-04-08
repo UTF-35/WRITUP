@@ -1,6 +1,5 @@
 # 🚨 RedAlert-Pi: A DIY Python IDS for Raspberry Pi
 
-> *"Pour comprendre le réseau, il faut écouter ce qu'il chuchote."*
 
 RedAlert-Pi est un Système de Détection d'Intrusion (IDS) léger et artisanal conçu pour tourner sur un Raspberry Pi 4. Contrairement aux solutions lourdes comme Snort ou Suricata, ce projet a été codé **from scratch** en Python avec Scapy pour comprendre la mécanique interne d'une cyberattaque.
 
