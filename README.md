@@ -16,3 +16,7 @@ Je tiens à préciser que **la plupart des README des projets sont réécrits et
 
 **👉 Je vous invite à explorer les différentes branches pour découvrir les projets !(tout n'est pas poster mais ca arrive soon les writeups me prenne beaucoup de temps)**
 
+Retrouvez mon activité ici :
+
+* **Blue Team Labs Online (BTLO) :** [Mon Profil](https://blueteamlabs.online/public/user/b02fbb99ed7ceb171432ca)
+
