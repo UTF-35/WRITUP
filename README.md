@@ -16,3 +16,9 @@ Je tiens à préciser que **la plupart des README des projets sont réécrits et
 
 **👉 Je vous invite à explorer les différentes branches pour découvrir les projets ! (tout n'est pas encore posté, mais ça arrive les writeups me prennent beaucoup de temps)**
 
+Retrouvez mon activité ici :
+
+* **Blue Team Labs Online (BTLO) :** [Mon Profil](https://blueteamlabs.online/public/user/b02fbb99ed7ceb171432ca)
+* **RootMe:** [Mon Profil](https://www.root-me.org/Willou-897711?lang=fr#e7154d25c8e99fcad3f23672a8a827a4)
+* **CodeWars:** [Mon Profil](https://www.codewars.com/users/UTF-35)
+
